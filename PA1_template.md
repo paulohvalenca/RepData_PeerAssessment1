@@ -7,7 +7,8 @@ output:
 
 
 ## Loading and preprocessing the data
-```{R, echo = TRUE}
+
+```r
 unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
@@ -16,53 +17,81 @@ activity <- read.csv("activity.csv")
 
 ### 1. Calculate the total number of steps taken per day.
 
-```{R, echo = TRUE}
+
+```r
 steps.by.date <- aggregate(steps ~ date, activity, sum, na.rm=TRUE)
 ```
 
 ### 2. Make a histogram of the total number of steps taken each day.
 
-```{R, echo = TRUE}
+
+```r
 hist(steps.by.date$steps)
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
 ### 3. Calculate and report the mean and median of the total number of steps taken per day.
 
-```{R, echo = TRUE}
+
+```r
 mean(steps.by.date$steps)
 ```
-```{R, echo = TRUE}
+
+```
+## [1] 10766.19
+```
+
+```r
 median(steps.by.date$steps)
-``` 
+```
+
+```
+## [1] 10765
+```
 
 ## What is the average daily activity pattern?
 
 ### 1. Make a time series plot (i.e. \color{red}{\verb|type = "l"|}type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
 
-```{R, echo = TRUE}
+
+```r
 steps.by.interval <- aggregate(steps~interval, 
                           data=activity, 
                           mean, na.rm = TRUE)
 plot(steps ~ interval, data = steps.by.interval, type = "l")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
 ### 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{R, echo = TRUE}
+
+```r
 steps.by.interval[which.max(steps.by.interval$steps),]$interval
+```
+
+```
+## [1] 835
 ```
 
 ## Imputing missing values
 
 ### 1.Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with N𝙰s).
 
-```{R, echo = TRUE}
+
+```r
 sum(is.na(activity$steps))
+```
+
+```
+## [1] 2304
 ```
 
 ### 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc. 
 
-```{R, echo = TRUE}
+
+```r
 gi <-function(i){
     steps.by.interval[steps.by.interval$i==i,]$steps
 }
@@ -70,7 +99,8 @@ gi <-function(i){
 
 ### 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-```{R, echo = TRUE}
+
+```r
 complete <-activity
 for(i in 1:nrow(complete)){
     if(is.na(complete[i,]$steps)){
@@ -85,16 +115,31 @@ for(i in 1:nrow(complete)){
 
 ### 1. Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
 
-```{R, echo = TRUE}
+
+```r
 totalcomplete <- aggregate(steps ~ date, data=complete, sum)
 hist(totalcomplete$steps)
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+
 ### 2. Make a panel plot containing a time series plot (i.e. \color{red}{\verb|type = "l"|}type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 
-```{R, echo = TRUE}
+
+```r
 mean(totalcomplete$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
 median(totalcomplete$steps)
+```
+
+```
+## [1] 10766.19
 ```
 
 
